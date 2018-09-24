@@ -1,0 +1,6 @@
+Project: Weather App
+Contributers: Antonio Castro , Seth Delpachitra
+
+As a user i should give the server a city and it should tell me the weather for that city.
+As a user, I should be able to view the long range forecast for the next week for any given location.
+As a user I should be able to see the % likelihood of precipation for a set time period in the day, eg Tuesday 10am-12am, 10% chance of precipation.
