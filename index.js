@@ -1,4 +1,16 @@
 var express = require('express');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/calendar_data_store');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error'));
+db.once('open', function(){
+    //connection complete!
+    console.log('Connection has beeen successfully made');
+
+});
+
 var app = express();
 
 // Our first route
