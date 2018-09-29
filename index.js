@@ -1,24 +1,22 @@
-var express = require('express');
-var mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('mongoose');
+const UserRouter = require('./routers/User.js');
+const bodyParser = require('body-parser');
+
 
 mongoose.connect('mongodb://localhost/calendar_data_store');
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
-db.once('open', function(){
-    //connection complete!
-    console.log('Connection has beeen successfully made');
+db.once('open', () => console.log('Connection has beeen successfully made'));
 
-});
-
-var app = express();
+const app = express();
 
 // Our first route
-app.get('/', function (req, res) {
-    res.send('Hello Dev!');
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+UserRouter(app);
 
+app.use('/', (req, res) => res.send('Invalid Route'));
 // Listen to port 5000
-app.listen(5000, function () {
-    console.log('Dev app listening on port 5000!');
-});
+app.listen(5000, () => console.log('Dev app listening on port 5000!'));
