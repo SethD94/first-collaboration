@@ -18,7 +18,9 @@ const UserController = {
   //Log in an existing user
 
   // Return a list of users
-
+  getUserList: (req, res) => {
+    User.find();
+  },
   // return a user based on username or id
 };
 

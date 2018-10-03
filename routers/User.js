@@ -1,7 +1,10 @@
 const UserController = require('../controllers/User.js');
+const express = require('express');
+const router = express.Router();
 
-const UserRouter = (app) => {
-  app.post('/user/signup', UserController.addUser);
-}
+router.post('/user/signup' , UserController.addUser);
+router.get('/user/list' , UserController.getUserList);
 
-module.exports = UserRouter;
+
+
+module.exports = router;
