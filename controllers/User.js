@@ -28,7 +28,9 @@ const UserController = {
 
     else {
 
- 
+      User.findOne({"username" : username})
+        .then(users => res.send(users))
+        .catch(res.send("Username not found"));
     }
   },
 
