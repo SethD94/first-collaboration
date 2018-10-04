@@ -11,12 +11,12 @@ db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Connection has beeen successfully made'));
 
 const app = express();
-app.use(UserRouter);
+
 
 // Our first route
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(UserRouter);
 
 app.use('/', (req, res) => res.send('Invalid Route'));
 // Listen to port 5000

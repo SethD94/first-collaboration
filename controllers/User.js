@@ -17,13 +17,33 @@ const UserController = {
   },
   //Log in an existing user
 
-  // Return a list of users
+  loginUser: (req, res) => {
+    const { username, password } = req.body;
+    if(!username){
+      return res.status(422).send('Please enter your Username');
+    }
+    else if (!password){
+      return res.status(422).send('Please enter your Password');
+    }
+
+    else {
+
+ 
+    }
+  },
+
+  // Return a list of users (by username?)
+  
   getUserList: (req, res) => {
-    User.find()
+    User.findOne().select("username")
       .then(users => res.send(users));
   },
   // return a user based on username or id
-  
+  getUser: (req, res) => {
+    const{username, id} = req.body;
+
+  },
+
 };
 
 module.exports = UserController;
