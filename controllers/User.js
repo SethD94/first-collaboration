@@ -19,9 +19,11 @@ const UserController = {
 
   // Return a list of users
   getUserList: (req, res) => {
-    User.find();
+    User.find()
+      .then(users => res.send(users));
   },
   // return a user based on username or id
+  
 };
 
 module.exports = UserController;
