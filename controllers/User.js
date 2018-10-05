@@ -7,13 +7,30 @@ const UserController = {
     if (!username || !password || !name) {
       return res.status(422).send('Please provide all info');
     }
-    const newUser = new User({
-      username,
-      password,
-      name,
-    });
-    newUser.save();
-    return res.status(201).send(newUser);
+
+    else{
+
+      User.findOne({"username" : username})
+        .then(user=> {
+            if(Object.keys(user).length <= 0){
+                const newUser = new User({
+                  username,
+                  password,
+                  name,
+                });
+                newUser.save();
+                return res.status(201).send(newUser);
+              }
+            else{
+              return res.send("Username already exists");
+            }
+
+        })
+        .catch(err => res.send("Query Error"));
+
+
+    }
+
   },
   //Log in an existing user
 
