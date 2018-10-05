@@ -29,20 +29,47 @@ const UserController = {
     else {
 
       User.findOne({"username" : username})
-        .then(users => res.send(users))
-        .catch(res.send("Username not found"));
+        .then(user => {
+            if(Object.keys(user).length <= 0){
+             return res.send("Username not found"); 
+              
+            }
+            else{
+              if(password === user.password){
+                return res.send(user);
+              }
+              else{
+                return res.send("Incorrect Password");
+              }
+              
+
+            }
+        
+          })
+        .catch(err => res.send("Username not found!"));
     }
   },
 
   // Return a list of users (by username?)
   
   getUserList: (req, res) => {
-    User.findOne().select("username")
-      .then(users => res.send(users));
+    User.find()
+      .then(users => res.send(users))
+      .catch(err => console.log("Query unsuccessful"));
+      
   },
-  // return a user based on username or id
-  getUser: (req, res) => {
-    const{username, id} = req.body;
+  // return a user based on id
+  getUserById: (req, res) => {
+    const{id} = req.params;
+    if(!id){
+      return(res.send("Please enter a valid ID"));
+    }
+    else{
+      User.findById(id)
+        .then(user => res.send(user))
+        .catch(err => res.send("Query Unsuccessful"));
+        
+    }
 
   },
 
