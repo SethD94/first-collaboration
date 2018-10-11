@@ -5,6 +5,8 @@ const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 
 
+
+authentication ();
 router.post('/user/signup' , UserController.addUser);
 router.get('/user/list' , UserController.getUserList);
 router.post('/user/login' , passport.authenticate('local', { successRedirect: '/', failureRedirect: 'user/login'}));
