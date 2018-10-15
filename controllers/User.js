@@ -1,6 +1,4 @@
 const User = require('../models/User.js');
-const passport = require('passport');
-const Strategy = require('passport-local').Strategy;
 
 const UserController = {
   // Add a new user
