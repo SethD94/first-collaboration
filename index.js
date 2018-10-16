@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const UserRouter = require('./routers/User.js');
 const bodyParser = require('body-parser');
 
-
-mongoose.connect('mongodb://localhost/calendar_data_store');
+mongoose.set('debug', true);
+mongoose.connect('mongodb://localhost/calendar_data_store', {useNewUrlParser:true});
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));

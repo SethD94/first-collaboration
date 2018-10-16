@@ -7,30 +7,27 @@ const UserController = {
     if (!username || !password || !name) {
       return res.status(422).send('Please provide all info');
     }
-
-    else{
-
-      User.findOne({"username" : username})
-        .then(user=> {
-            if(Object.keys(user).length <= 0){
-                const newUser = new User({
-                  username,
-                  password,
-                  name,
-                });
-                newUser.save();
-                return res.status(201).send(newUser);
-              }
-            else{
-              return res.send("Username already exists");
-            }
-
-        })
-        .catch(err => res.send("Query Error"));
-
-
+    else {
+      User.findOne({"username" : username}, function (err, user) {
+        if(err){
+          return res.send(err, "Query Error");
+        }
+        else {
+          if(user === null || undefined){  
+            const newUser = new User({
+                username,
+                password,
+                name,
+              });
+              newUser.save();
+              return res.status(201).send(newUser);
+           }
+          else {
+            return res.send("Username already exists");
+         }
+        }
+      });
     }
-
   },
   //Log in an existing user
 
@@ -45,9 +42,9 @@ const UserController = {
 
     else {
 
-      User.findOne({"username" : username})
+      User.find({"username" : username})
         .then(user => {
-            if(Object.keys(user).length <= 0){
+            if(Object.keys(user).length === 0){
              return res.send("Username not found"); 
               
             }
@@ -63,7 +60,7 @@ const UserController = {
             }
         
           })
-        .catch(err => res.send("Username not found!"));
+        .catch(err => res.send("Query Error with login method."));
     }
   },
 
