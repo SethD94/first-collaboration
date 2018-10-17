@@ -55,19 +55,27 @@ const UserController = {
 
     else {
 
-      User.find({"username" : username})
+      User.findOne({"username" : username})
         .then(user => {
             if(Object.keys(user).length === 0){
              return res.send("Username not found"); 
               
             }
             else{
-              if(password === user.password){
-                return res.send(user);
-              }
-              else{
-                return res.send("Incorrect Password");
-              }
+              bcrypt.compare(password, user.password, function(err, result) {
+                // res == true
+                if(err){
+                  return res.send("there was an error boi");
+                }
+                else{
+                  if(result){
+                    return res.send(user);
+                  }
+                  else{
+                    return res.send("Incorrect Credentials")
+                  }
+                }
+            });
               
 
             }
