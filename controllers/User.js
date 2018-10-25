@@ -1,8 +1,54 @@
 const User = require('../models/User.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+passport.serializeUser(function(user, done){
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done){
+  User.findById(id, function(err, user){
+    done(err, user);
+  });
+});
+
+passport.use('local.signup', new LocalStrategy({
+  passReqToCallback: true
+}, function(name, username, password, done){
+    User.findOne({'username':username}, function(err,user){
+      if(err){
+        return done(err);
+      }
+      if(user){
+        return done(null, false);
+      }
+      const newUser = new User({
+        username,
+        password,
+        name,
+      });
+
+      newUser.save(function(err){
+        if (err){
+            return done(err);
+        }
+        return done(null, newUser)
+      })
+    })
+}
+
+));
+
 
 const UserController = {
+
+  signUpNewUser: (req, res) => {
+      passport.authenticate('local.signup');
+  },
+
+
   // Add a new user
   addUser: (req, res) => {
     const { username, password, name } = req.body;
@@ -65,7 +111,7 @@ const UserController = {
               bcrypt.compare(password, user.password, function(err, result) {
                 // res == true
                 if(err){
-                  return res.send("there was an error boi");
+                  return res.send("there was an error");
                 }
                 else{
                   if(result){
@@ -107,6 +153,8 @@ const UserController = {
     }
 
   },
+
+
 
 };
 
