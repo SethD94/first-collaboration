@@ -45,7 +45,11 @@ passport.use('local.signup', new LocalStrategy({
 const UserController = {
 
   signUpNewUser: (req, res) => {
-      passport.authenticate('local.signup');
+      passport.authenticate('local.signup',{
+        successRedirect:'/signup',
+        failureRedirect: '/signup',
+        failureFlash: true
+      });
   },
 
 
