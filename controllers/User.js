@@ -34,8 +34,10 @@ passport.use('local.signup', new LocalStrategy({
         if (err){
             return done(err);
         }
-        return done(null, newUser)
-      })
+        else{
+          return done(null, newUser)
+        }
+      });
     })
 }
 

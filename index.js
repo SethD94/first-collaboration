@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const mongoStore = require('connect-mongo')(session);
-
+require('./config/passportSetup');
 
 mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/calendar_data_store', {useNewUrlParser:true});
@@ -17,6 +17,10 @@ db.once('open', () => console.log('Connection has beeen successfully made'));
 
 const app = express();
 
+app.set('view engine', 'ejs');
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Our first route
 app.use(bodyParser.json());
@@ -29,8 +33,6 @@ app.use(session({
     saveUninitialized: true,
     store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 app.use('/', (req, res) => res.send('Invalid Route'));
