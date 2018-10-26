@@ -4,70 +4,18 @@ const saltRounds = 12;
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-passport.serializeUser(function(user, done){
-  done(null, user.id);
-});
 
-passport.deserializeUser(function(id, done){
-  User.findById(id, function(err, user){
-    done(err, user);
-  });
-});
-
-passport.use('local.signup', new LocalStrategy({
-  passReqToCallback: true
-}, function(name, username, password, done){
-    console.log("entered passport callback");
-    User.findOne({'username':username}, function(err,user){
-      if(err){
-        console.log("there was an error");
-        return done(err);
-      }
-      if(user){
-        console.log("user already exists");
-        return done(null, false);
-      }
-      const newUser = new User({
-        username,
-        password,
-        name,
-      });
-
-      newUser.save(function(err){
-        if (err){
-            return done(err);
-        }
-        else{
-          return done(null, newUser)
-        }
-      });
-    })
-}
-
-));
 
 
 const UserController = {
 
-  signUpNewUser: (req, res) => {
-      passport.authenticate('local.signup',{
-        successRedirect:'/signup',
-        failureRedirect: '/signup',
-        failureFlash: true,
-      }), res.send(req.user); 
-      
-     /* if (req.user) {
-        // logged in
-        res.send("Congrats, login successful");
-    } else {
-        // not logged in
-        res.send("Login failed");
-    }*/
-      
-
-   
+  signInUser: (req, res) => {
+    res.send(req.user);
   },
 
+  signInError: (req, res) => {
+    res.send('error logging in');
+  },
 
   // Add a new user
   addUser: (req, res) => {
