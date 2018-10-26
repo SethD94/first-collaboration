@@ -17,11 +17,14 @@ passport.deserializeUser(function(id, done){
 passport.use('local.signup', new LocalStrategy({
   passReqToCallback: true
 }, function(name, username, password, done){
+    console.log("entered passport callback");
     User.findOne({'username':username}, function(err,user){
       if(err){
+        console.log("there was an error");
         return done(err);
       }
       if(user){
+        console.log("user already exists");
         return done(null, false);
       }
       const newUser = new User({
@@ -50,8 +53,19 @@ const UserController = {
       passport.authenticate('local.signup',{
         successRedirect:'/signup',
         failureRedirect: '/signup',
-        failureFlash: true
-      });
+        failureFlash: true,
+      }), res.send(req.user); 
+      
+     /* if (req.user) {
+        // logged in
+        res.send("Congrats, login successful");
+    } else {
+        // not logged in
+        res.send("Login failed");
+    }*/
+      
+
+   
   },
 
 
