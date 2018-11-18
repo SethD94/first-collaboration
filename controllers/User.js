@@ -1,60 +1,12 @@
 const User = require('../models/User.js');
-const bcrypt = require('bcrypt');
 const saltRounds = 12;
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-
-
-
 const UserController = {
-
-  signInUser: (req, res) => {
-    res.send(req.user);
-  },
 
   signInError: (req, res) => {
     res.send('error logging in');
-  },
-
-  // Add a new user
-  addUser: (req, res) => {
-    const { username, password, name } = req.body;
-    if (!username || !password || !name) {
-      return res.status(422).send('Please provide all info');
-    }
-
-    else {
-
-      User.find({"username" : username})
-        .then(user => {
-            if(Object.keys(user).length <= 0){ 
-              bcrypt.hash(password, saltRounds, function(err, password) {
-                if (err){
-                  return res.send("There was a password error");
-                }// Store hash in your password DB.
-                else{
-                  const newUser = new User({
-                    username,
-                    password,
-                    name,
-                  });
-                  newUser.save();
-                  return res.status(201).send(newUser);
-                }
-              });
-
-             }
-            else {
-              return res.send("Username already exists");
-           }
-
-        })
-        .catch(err => res.send("Query Error"));
-
-
-    }
-
   },
   //Log in an existing user
 

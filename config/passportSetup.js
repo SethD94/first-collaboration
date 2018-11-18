@@ -1,10 +1,11 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
-
 passport.serializeUser(function(user, done){
-    done(null, user.id);
+  console.log('serializing: ', user)
+    done(null, user._id);
   });
   
   passport.deserializeUser(function(id, done){
@@ -13,20 +14,26 @@ passport.serializeUser(function(user, done){
     });
   });
   
-  passport.use('local', new LocalStrategy({
-    
-  }, function(username, password, done) {
-            User.findOne({ "username": username }, function(err, user) {
-            if (err) { 
-                return done(err); }
-            if (!user) {
-                return done(null, false);
-            }
-            if (user.password != password) {
-                return done(null, false);
-            }
-            return done(null, user);
-            });
-        }
+  passport.use('local-signup', new LocalStrategy({
+
+  }, (username,password, done) => {
+
+    User.findOne({ username }).then(user => {
+      if (user) {
+        return done(null, false);
+      }
+      bcrypt.hash(password, 10)
+        .then(hashedPassword => {
+          const newUser = new User({
+            username,
+            password: hashedPassword
+          });
+          newUser.save();
+          return done(null, newUser);
+        })
+        .catch(err => done(err));
+    })
+    .catch(err => done(err));
+  }
 ));
   

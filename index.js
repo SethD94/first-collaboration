@@ -29,9 +29,6 @@ app.use(UserRouter);
 app.use(cookieParser());
 app.use(session({
     secret: 'mysecretsessionkey',
-    resave: true,
-    saveUninitialized: true,
-    store: new mongoStore({mongooseConnection: mongoose.connection})
 }));
 
 
