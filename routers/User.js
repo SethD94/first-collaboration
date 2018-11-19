@@ -5,7 +5,10 @@ const express = require('express');
 const router = express.Router();
 
 
-router.post('/user/signup', passport.authenticate('local', { failureRedirect: '/error' }), UserController.signInUser);
+router.post('/user/signup', passport.authenticate('local.signup', {session: false}, { failureRedirect: '/error' }), (req, res) =>{
+ console.log(Object.keys(req));
+
+});
 router.get('/user/list' , UserController.getUserList);
 router.post('/user/login' , UserController.loginUser);
 router.get('/user/:id' , UserController.getUserById);

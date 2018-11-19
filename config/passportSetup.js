@@ -1,10 +1,10 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/User');
-
+const bcrypt = require('bcrypt');
 
 passport.serializeUser(function(user, done){
-    done(null, user.id);
+    done(null, user._id);
   });
   
   passport.deserializeUser(function(id, done){
@@ -13,20 +13,26 @@ passport.serializeUser(function(user, done){
     });
   });
   
-  passport.use('local', new LocalStrategy({
-    
-  }, function(username, password, done) {
-            User.findOne({ "username": username }, function(err, user) {
-            if (err) { 
-                return done(err); }
-            if (!user) {
-                return done(null, false);
-            }
-            if (user.password != password) {
-                return done(null, false);
-            }
-            return done(null, user);
-            });
-        }
+/*
+Create strategy for signing in a new user
+
+1)Passport is provided a username, pasword
+2)Passport then queries the database to check if the username already exists
+  If the username exists
+    Request new username
+  else
+    hash the password
+    Create new user
+3)Return the user
+4)Assign the user a token
+
+*/
+
+  passport.use('local.signup', new LocalStrategy({
+
+  }, (username, password, done) => {
+
+
+ }
 ));
   
