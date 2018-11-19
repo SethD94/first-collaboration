@@ -5,8 +5,8 @@ const express = require('express');
 const router = express.Router();
 
 
-router.post('/user/signup', passport.authenticate('local.signup', {session: false}, { failureRedirect: '/error' }), (req, res) =>{
- console.log(Object.keys(req));
+router.post('/user/signup', passport.authenticate('local.signup', { failureRedirect: '/error' }), (req, res) => {
+  res.send("hello");
 
 });
 router.get('/user/list' , UserController.getUserList);
