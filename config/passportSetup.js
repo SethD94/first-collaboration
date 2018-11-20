@@ -90,7 +90,7 @@ passport.use('local.login', new LocalStrategy({
         .then((res) => {
           if(res){
             console.log("passwords match!");
-            return done(null, user)
+            return done(null, user[0])
           } else {
             console.log("passwords do not match")
             return done(null, false);
