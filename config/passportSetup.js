@@ -30,15 +30,17 @@ Create strategy for signing in a new user
 */
 
   passport.use('local.signup', new LocalStrategy({
+      passReqToCallback: true
 
-  }, (username, password, done) => {
-       console.log("entered passport auth flow");
+  }, (req, username, password, done) => {
+
+       console.log(req.url);
        User.findOne({'username': username})
        .then(user => {
          if(user){
             console.log("user already exists");
             return done(null, false);
-         } 
+         } else {
             bcrypt.hash(password, 10)
             .then(hashedPassword => {
               const newUser = new User({
@@ -50,9 +52,55 @@ Create strategy for signing in a new user
               return done(null, newUser);
             })
             .catch(err => done(err));     
-         
+        }
        })
        .catch(err => done(err));
  }
+));
+/* 
+Login strategy
+
+1) Passport is provided a username and password 
+2) Check if the username exists
+3) If correct username is entered
+    Decrypt the password and check it
+     if the password is correct
+       log the user in
+       return a token to the user 
+     if the password is incorrect
+       ask the user the enter the correct password
+   If incorrect username is entered
+  
+    Return an error to the user and ask them to enter a valid username
+*/
+passport.use('local.login', new LocalStrategy({
+    passReqToCallback: true
+
+}, (req, username, password, done) => {
+   
+    User.find({username}).limit(1)
+    .then(user => {
+      if(!user){
+        
+          console.log("username doesn't exist");
+          return done(null, false);
+      } else {
+  
+        bcrypt.compare(password, user[0].password)
+        .then((res) => {
+          if(res){
+            console.log("passwords match!");
+            return done(null, user)
+          } else {
+            console.log("passwords do not match")
+            return done(null, false);
+          }
+      })
+      .catch(err => done(err));
+      }
+    })
+    .catch(err => done(err));
+ 
+}
 ));
   

@@ -34,6 +34,7 @@ const UserController = {
                   return res.send("There was a password error");
                 }// Store hash in your password DB.
                 else{
+                  
                   const newUser = new User({
                     username,
                     password,

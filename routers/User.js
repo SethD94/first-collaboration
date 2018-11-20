@@ -10,7 +10,9 @@ router.post('/user/signup', passport.authenticate('local.signup', { failureRedir
 
 });
 router.get('/user/list' , UserController.getUserList);
-router.post('/user/login' , UserController.loginUser);
+router.post('/user/login' , passport.authenticate('local.login', {session: false}, { failureRedirect: '/error' }), (req, res) => {
+  res.send("hello user");
+});
 router.get('/user/:id' , UserController.getUserById);
 router.get('/error', UserController.signInError);
 
